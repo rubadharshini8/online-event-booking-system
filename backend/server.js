@@ -230,30 +230,14 @@ app.get("/organizers", (req, res) => {
     res.json(result);
   });
 });
-
 app.post("/admin-login", (req, res) => {
   const { username, password } = req.body;
 
-  const sql = "SELECT * FROM admins WHERE username=?";
-  db.query(sql, [username], (err, result) => {
-    if (err) return res.status(500).send("Error");
-
-    if (result.length === 0) {
-      return res.json({ success: false });
-    }
-
-    const hashedPassword = result[0].password;
-
-    bcrypt.compare(password, hashedPassword, (err, match) => {
-      if (err) return res.status(500).send("Error");
-
-      if (match) {
-        res.json({ success: true });
-      } else {
-        res.json({ success: false });
-      }
-    });
-  });
+  if (username === "admin" && password === "admin123") {
+    res.json({ success: true });
+  } else {
+    res.json({ success: false });
+  }
 });
 
 app.listen(process.env.PORT, () => {
