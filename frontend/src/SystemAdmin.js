@@ -85,7 +85,7 @@ function SystemAdmin() {
         <p>Loading events...</p>
       ) : (
         events.map(event => {
-          const eventBookings = bookings.filter(b => b.event_id == event.id);
+          const eventBookings = bookings.filter(b => b.event_id === event.id);
 
           return (
             <div key={event.id} style={eventCardStyle}>
