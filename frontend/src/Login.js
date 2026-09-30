@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const containerStyle = {
   display: "flex",
@@ -40,8 +41,13 @@ function Login() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
+    if (!username || !password) {
+      alert("Please enter username and password");
+      return;
+    }
 
   const res = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
     method: "POST",
@@ -55,9 +61,9 @@ function Login() {
   console.log(data);
 
   if (data.success) {
-    localStorage.setItem("role", "admin");
+    localStorage.setItem("role", "organizer");
     localStorage.setItem("username", username);  
-    window.location.href = "/organizer";
+    navigate("/organizer");
   } else {
     alert("Invalid credentials");
   }
