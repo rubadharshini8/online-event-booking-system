@@ -8,22 +8,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
-  user: process.env.DB_USER,
   port: process.env.DB_PORT,
+  user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-db.connect(err => {
+db.getConnection((err, connection) => {
   if (err) {
     console.log("Database connection failed");
   } else {
     console.log("Connected to MySQL");
+    connection.release();
   }
 });
-
 // ── Events ──────────────────────────────────────────────────────
 
 app.get("/events", (req, res) => {
